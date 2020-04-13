@@ -4,9 +4,7 @@
 
 #####PowerShell Script trigger to delete folder/files on the windows server
 #####################################################
-
-
-#PowerShell Script to delete folder/files on the windows server
+#
 
 Start-Transcript -Path "C:\Users\ishba\Downloads\Test\tran.txt" -noclobber -append
 
