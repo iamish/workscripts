@@ -5,16 +5,31 @@
 # Program:
 #   Delete Folders on the server with on the fly cron
 #####################################################
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root"
+   exit 1
+   else
+ echo " You are running this scirpt as root user"
+fi
 
-# Replace the file location upon every new deployment, cronjob set to every 24 hours
-crontab -l | { cat; echo "0 0 * * * /home/ishpuneetsingh007/shell.sh"; } | crontab -
- 
-#1st Directory path
- Dir_1="test/*"
- rm -rf $Dir_1
 
-#2nd  Directory path
-#Dir_2="test/test1/*"
-#rm -rf $Dir_2
+DIR="/home/ishpuneetsingh007/test"
+if [ -d "$DIR" ]; then
+  # Control will enter here if $DIRECTORY exists.
+   echo " The directory exists"
+else 
+echo " The directory doesn't exist"
+exit
+fi
 
-echo "Files Deleted"
+# init
+# look for empty dir
+if [ "$(ls -A $DIR)" ]; then
+     echo "$DIR is not Empty"
+else
+    echo "$DIR is Empty"
+exit
+fi
+echo "**************************"
+
