@@ -6,19 +6,35 @@
 #####################################################
 
 
+#PowerShell Script to delete folder/files on the windows server
+
+Start-Transcript -Path "C:\Users\ishba\Downloads\Test\trans.txt" -noclobber -append
+
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+ {
+  Echo "This script needs to be run As Admin"
+  Break
+ }
+else {
+    "You are running this script as a root user"
+}
 
 
-
-$Trigger= New-ScheduledTaskTrigger -At 12:00PM -Daily  # Specify the trigger settings
-
-$User= "ishba" # Specify the account to run the script
-
-$Action= New-ScheduledTaskAction -Execute "PowerShell.exe"  -Argument "C:\Users\ishba\Downloads\Test\windows.ps1" # Specify what program to run and with its parameters
-
-Register-ScheduledTask -TaskName "Delete folders and files " -Trigger $Trigger -User $User -Action $Action -RunLevel Highest ñForce # Specify the name of the task
+if ( Test-Path C:\Windows ) {
+    echo "Directory Exists"
+} else {
+    echo "Directory doesn't Exists"
+ Break
+}
 
 
-####PowerShell Script to delete folder/files on the windows server
+If ((Get-ChildItem -Force C:\Users\ishba\Downloads\Test\test1) -eq $Null) {
+    "the Folder is empty"
+Break
+}
+else {
+    "Directory is not empty"
+}
 
 
 Set-ExecutionPolicy RemoteSigned
@@ -27,10 +43,12 @@ $Dir1 = "C:\Users\ishba\Downloads\Test\test1\*"   #it will delete all the conten
 $Dir2 = "C:\Users\ishba\Downloads\Test\test2"     #it will delete the content leaving the directory structure intact
   
   
-Remove-Item   -Path $Dir1 -recurse                #it will delete all the content of the specific folder
-Get-ChildItem -Path $Dir2  -Include * -File -Recurse | foreach { $_.Delete()}    #it will delete the content leaving the directory structure intact
-
+Remove-Item   -Path $Dir1 -recurse 
+Get-ChildItem -Path $Dir2  -Include * -File -Recurse | foreach { $_.Delete()}   
 
 echo "The files have been deleted successfully" 
+
 exit
+
+
 
