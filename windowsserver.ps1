@@ -4,9 +4,14 @@
 
 #####PowerShell Script trigger to delete folder/files on the windows server
 #####################################################
-#
 
-Start-Transcript -Path "C:\Users\ishba\Downloads\Test\tran.txt" -noclobber -append
+Echo "####################################"
+Echo "####################################"
+Echo "####################################"
+
+
+Start-Transcript -Path "C:\Users\ishba\Downloads\Test\trans.log" -noclobber -append
+
 
 If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
  {
@@ -28,27 +33,43 @@ Stop-Transcript
 }
 
 
-If ((Get-ChildItem -Force C:\Users\ishba\Downloads\Test\test1) -eq $Null) {
+If ((Get-ChildItem -Force C:\Users\ishba\Downloads\Test) -eq $Null) {
     "the Folder is empty"
 Stop-Transcript
-Break
+#Break
 }
 else {
     "Directory is not empty"
 }
 
 
-Set-ExecutionPolicy RemoteSigned
 
+####
+####
+<#
 $Dir1 = "C:\Users\ishba\Downloads\Test\test1\*"   #it will delete all the content of the specific folder
-$Dir2 = "C:\Users\ishba\Downloads\Test\test2"     #it will delete the content leaving the directory structure intact
-  
-  
 Remove-Item   -Path $Dir1 -recurse 
-Get-ChildItem -Path $Dir2  -Include * -File -Recurse | foreach { $_.Delete()}   
-
 echo "The files have been deleted successfully" 
-Stop-Transcript
-exit
+#>
+####
+####
 
+
+# Delete all Files older than 1 day
+####
+####
+Set-ExecutionPolicy RemoteSigned
+$Dir2 = "C:\Users\ishba\Downloads\Test\"     #it will delete the content leaving the directory structure intact
+$Daysback = "-1" 
+$CurrentDate = Get-Date
+$DatetoDelete = $CurrentDate.AddDays($Daysback)
+Get-ChildItem -Path $Dir2  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item 
+echo "The files older than one day have been deleted successfully" 
+
+# Delete Log Files older than 7 day
+####
+####
+Get-ChildItem –Path  "C:\Users\ishba\Downloads\Test\" –Recurse -Force -include *.log | Where-Object { $_.CreationTime –lt (Get-Date).AddDays(-1) } | Remove-Item -Force
+
+exit
 
