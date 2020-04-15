@@ -6,10 +6,10 @@
 #   Delete Folders on the server with on the fly cron
 #####################################################
 
+
 #!/bin/bash
 #find . -name "*.log" -print -mmin +2 -type f -exec rm {} \;
-find . -name "*.log" -print -mtime +7 -type f -exec rm {} \;
-
+find . -name "*.txt" -print -mtime +7 -type f -exec rm {} \;
 log_file="test.log"
 exec &> >(tee -a "$log_file")
 echo "**********************************************"
@@ -44,5 +44,5 @@ fi
 #
 #find "$DIRR" -name "*.log" -print -type f -exec rm {} \;
 #find "$DIRR" -print -type f -exec rm {} \;
-find "$DIRR" -print -mtime +1 -type f -exec rm {} \;
+find "$DIRR" -print -mmin +$((60*24)) -type f -exec rm {} \;
 echo "Files Deleted"
