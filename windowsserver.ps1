@@ -1,4 +1,3 @@
-
 #####################################################
 # Author: Ishpuneet Singh
 
@@ -9,8 +8,12 @@ Echo "####################################"
 Echo "####################################"
 Echo "####################################"
 
+$Dir1 = "C:\Users\ish\Desktop\Test\script.log"
+$Dir2 = "C:\Users\ish\Desktop\Test\"
+$Dir3 = "C:\Users\ish\Desktop\Test\test3\"
 
-Start-Transcript -Path "C:\Users\ishba\Downloads\Test\trans.log" -noclobber -append
+
+Start-Transcript -Path $Dir1 -noclobber -append
 
 
 If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
@@ -24,7 +27,7 @@ else {
 }
 
 
-if ( Test-Path C:\Windows ) {
+if ( Test-Path $Dir2 ) {
     echo "Directory Exists"
 } else {
     echo "Directory doesn't Exists"
@@ -32,8 +35,7 @@ Stop-Transcript
  Break
 }
 
-
-If ((Get-ChildItem -Force C:\Users\ishba\Downloads\Test) -eq $Null) {
+If ((Get-ChildItem -Force $Dir2) -eq $Null) {
     "the Folder is empty"
 Stop-Transcript
 #Break
@@ -41,25 +43,15 @@ Stop-Transcript
 else {
     "Directory is not empty"
 }
-
-
-
-####
-####
-<#
-$Dir1 = "C:\Users\ishba\Downloads\Test\test1\*"   #it will delete all the content of the specific folder
-Remove-Item   -Path $Dir1 -recurse 
-echo "The files have been deleted successfully" 
-#>
-####
 ####
 
 
+####
 # Delete all Files older than 1 day
 ####
 ####
 Set-ExecutionPolicy RemoteSigned
-$Dir2 = "C:\Users\ishba\Downloads\Test\"     #it will delete the content leaving the directory structure intact
+#it will delete the content leaving the directory structure intact
 $Daysback = "-1" 
 $CurrentDate = Get-Date
 $DatetoDelete = $CurrentDate.AddDays($Daysback)
@@ -69,7 +61,7 @@ echo "The files older than one day have been deleted successfully"
 # Delete Log Files older than 7 day
 ####
 ####
-Get-ChildItem –Path  "C:\Users\ishba\Downloads\Test\" –Recurse -Force -include *.log | Where-Object { $_.CreationTime –lt (Get-Date).AddDays(-1) } | Remove-Item -Force
+Get-ChildItem –Path $Dir2 –Recurse -Force -include *.log | Where-Object { $_.CreationTime –lt (Get-Date).AddDays(-7) } | Remove-Item -Force
 
 exit
 
