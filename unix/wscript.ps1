@@ -53,7 +53,7 @@ Set-ExecutionPolicy RemoteSigned
 $Daysback = "-1" 
 $CurrentDate = Get-Date
 $DatetoDelete = $CurrentDate.AddDays($Daysback)
-Get-ChildItem -Path $Dir3  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item 
+Get-ChildItem -Path $Dir2  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item 
 echo "The files older than one day have been deleted successfully" 
 
 
