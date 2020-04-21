@@ -1,8 +1,8 @@
-#####################################################
+######################################################
 # Author: Ishpuneet Singh
 
 #####PowerShell Script trigger to delete folder/files on the windows server
-#####################################################
+######################################################
 . .\config.ps1
 
 Start-Transcript -Path $Dir1 -noclobber -append
