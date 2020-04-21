@@ -1,0 +1,3 @@
+log_file="logs.txt"
+DIR="/home/ishpuneetsingh007/test"
+DIRR="/home/ishpuneetsingh007/test/"
