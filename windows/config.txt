@@ -1,3 +1,4 @@
-log_file="logs.txt"
-DIR="/home/ishpuneetsingh007/test"
-DIRR="/home/ishpuneetsingh007/test/"
+log_file="./logs/logfile-$(date +%y%m%d.log)"
+log_retention="./logs/"
+FIND="./acss/"
+DIR="./acss/*"
