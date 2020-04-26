@@ -8,8 +8,11 @@
 source <(grep -E '^\w+=' config.txt)
 #####Log file deletion
 echo "**************************"
-echo "Log file deleted::"
-find $log_del -type f -mtime +$(($num)) -delete -print
+if test `find $log_del -type f -mmin +$(($num)) -print`
+then
+    echo "Log file deleted::"
+    find $log_del -type f -mmin +$(($num)) -delete -print
+fi
 echo "**************************"
 exec &> >(tee -a "$log_file")
 date
