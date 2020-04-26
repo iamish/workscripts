@@ -1,0 +1,5 @@
+log_file="./logs/logfile-$(date +%y%m%d.log)"
+log_del="./logs/"
+num="7"
+FIND="./acss/"
+DIR="./acss/*"
