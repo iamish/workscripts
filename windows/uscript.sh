@@ -52,7 +52,7 @@ fi
 ##
 #
 #echo "**************************"
-echo "Files/directory timestamped 24 hours ago Deleted"
+echo "Files/directory timestamped 24 hours ago Deleted  are ::"
 find $DIR -mmin +$((1*3)) -print 2>/dev/null
 find $DIR -mmin +$((1*3)) -exec rm -Rf {} \; 2>/dev/null
 echo "**************************"
