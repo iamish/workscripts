@@ -6,59 +6,55 @@
 #   Delete Folders on the server while preserving the directory structure with log retention of a week
 ##########################################################################################################
 
-
 #!/bin/bash
-
 source <(grep -E '^\w+=' config.txt)
+find "$log_retention" -type f -mtime +$((7)) -delete -print
 exec &> >(tee -a "$log_file")
 date
-
 echo "**********************************************"
 echo -e  "***********\nNew Log Entry\n************"
 echo "**********************************************"
-
-# init
-# look for user permissions
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root"
+echo "**************************"
+echo "**************************"
    exit 1
    else
  echo " You are running this scirpt as root user"
-
+echo "**************************"
+echo "**************************"
 fi
-
-# init
-# look if the directory exists
-if [ -d "$DIR" ]; then
+if [ -d $FIND ]; then
   # Control will enter here if $DIRECTORY exists.
    echo " The directory exists"
+echo "**************************"
+echo "**************************"
 else
 echo " The directory doesn't exist"
-exit
+echo "**************************"
+echo "**************************"
+exit 1
 fi
-
-
 # init
 # look for empty dir
-if [ "$(ls -A $DIR)" ]; then
-     echo "$DIR is not Empty"
+if [ "$(ls -A $FIND)" ]; then
+     echo "$FIND is not Empty"
+echo "**************************"
+echo "**************************"
 else
-    echo "$DIR is Empty"
-exit
+    echo "$FIND  is Empty"
+echo "**************************"
+echo "**************************"
+exit 1
 fi
-
 ####################################################################################
-#####Delete files timestamped 24 hours ago leaving the directory structure intact
+#####Delete files/directory timestamped 24 hours ago
 ##
 #
-
-find "$DIRR" -print -mmin +$((60*24)) -type f -exec rm {} \;
-
-echo "Files Deleted"
-
-
+#echo "**************************"
+echo "Files/directory timestamped 24 hours ago Deleted"
+find $DIR -mmin +$((1*3)) -print 2>/dev/null
+find $DIR -mmin +$((1*3)) -exec rm -Rf {} \; 2>/dev/null
 echo "**************************"
-echo "$(tail -n 106 logs.txt)" > logs.txt
-
 echo -e "\n"
 exit 0
