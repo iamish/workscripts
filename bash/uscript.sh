@@ -1,4 +1,9 @@
+##########################################################################################################
+# Author: Ishpuneet Singh
 
+# Program:
+#   Delete files and folder every 24 hours on the staging server with log retention of seven days
+##########################################################################################################
 #!/bin/bash
 source <(grep -E '^\w+=' config.txt)
 #####Log file deletion
