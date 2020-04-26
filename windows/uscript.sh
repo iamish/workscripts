@@ -8,7 +8,11 @@
 
 #!/bin/bash
 source <(grep -E '^\w+=' config.txt)
-find "$log_retention" -type f -mtime +$((7)) -delete -print
+#####Log file deletion
+##
+#echo "**************************"
+echo "Log file deleted::"
+find $log_del -type f -mmin +$(($num)) -delete -print
 exec &> >(tee -a "$log_file")
 date
 echo "**********************************************"
@@ -45,7 +49,7 @@ else
     echo "$FIND  is Empty"
 echo "**************************"
 echo "**************************"
-exit 1
+#exit 1
 fi
 ####################################################################################
 #####Delete files/directory timestamped 24 hours ago
