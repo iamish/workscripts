@@ -1,4 +1,0 @@
-log_file="./logs/logfile-$(date +%y%m%d.log)"
-log_retention="./logs/"
-FIND="./acss/"
-DIR="./acss/*"
