@@ -3,20 +3,22 @@
 
 #####PowerShell Script trigger to delete folder/files on the windows server
 #####################################################
-
-Echo "####################################"
-Echo "####################################"
-Echo "####################################"
-
-#####################################################
-# Author: Ishpuneet Singh
-
-#####PowerShell Script trigger to delete folder/files on the windows server
-#####################################################
 . .\config.ps1
 
-Start-Transcript -Path $Dir2 -noclobber -append
 
+####
+####
+# Rog retention 7 day
+####
+####
+echo "###############"
+$Date = Get-Date
+$Delete = $Date.AddMinutes($Log_rtntn)
+Get-ChildItem -Path $Log_Dir  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $Delete } | Remove-Item -Recurse -force -Verbose
+echo "###############"
+
+
+Start-Transcript -Path $Log_name -noclobber -append
 echo "`n"
 Get-date
 Echo "####################################" 
@@ -33,6 +35,7 @@ If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 else {
     "You are running this script as a root user"
 }
+
 
 
 if ( Test-Path $Acss_Dir ) {
@@ -62,12 +65,13 @@ Set-ExecutionPolicy RemoteSigned
 #it will delete the content leaving the directory structure intact 
 $CurrentDate = Get-Date
 $DatetoDelete = $CurrentDate.AddMinutes($Daysback)
-Get-ChildItem -Path $Acss_Dir  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Recurse -force
-echo "###############"
-echo "###############"
-Get-ChildItem -Path $Acss_Dir  -Directory -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Recurse -force
+Get-ChildItem -Path $Acss_Dir  -Directory -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Recurse -force -Verbose
 
 echo "###############"
+echo "###############"
+Get-ChildItem -Path $Acss_Dir  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Recurse -force -Verbose
+echo "###############"
+
 echo "The files older than one day have been deleted successfully" 
 
 
@@ -77,13 +81,7 @@ echo "`n"
 Stop-Transcript
 
 
-####
-####
-# Rog retention 7 day
-####
-####
 
-#Get-Content $Dir2 | select -Last 225 | Set-Content $Dir2
+
 
 exit
-
