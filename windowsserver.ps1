@@ -8,12 +8,20 @@ Echo "####################################"
 Echo "####################################"
 Echo "####################################"
 
-$Dir1 = "C:\Users\ish\Desktop\Test\script.log"
-$Dir2 = "C:\Users\ish\Desktop\Test\"
-$Dir3 = "C:\Users\ish\Desktop\Test\test3\"
+#####################################################
+# Author: Ishpuneet Singh
 
+#####PowerShell Script trigger to delete folder/files on the windows server
+#####################################################
+. .\config.ps1
 
-Start-Transcript -Path $Dir1 -noclobber -append
+Start-Transcript -Path $Dir2 -noclobber -append
+
+echo "`n"
+Get-date
+Echo "####################################" 
+Echo "#################`nNew Log Entry`n###################" 
+Echo "####################################"
 
 
 If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
@@ -27,7 +35,7 @@ else {
 }
 
 
-if ( Test-Path $Dir2 ) {
+if ( Test-Path $Acss_Dir ) {
     echo "Directory Exists"
 } else {
     echo "Directory doesn't Exists"
@@ -35,33 +43,47 @@ Stop-Transcript
  Break
 }
 
-If ((Get-ChildItem -Force $Dir2) -eq $Null) {
+If ((Get-ChildItem -Force $Acss_Dir) -eq $Null) {
     "the Folder is empty"
 Stop-Transcript
-#Break
+Break
 }
 else {
     "Directory is not empty"
 }
 ####
 
-
+####
 ####
 # Delete all Files older than 1 day
 ####
 ####
 Set-ExecutionPolicy RemoteSigned
-#it will delete the content leaving the directory structure intact
-$Daysback = "-1" 
+#it will delete the content leaving the directory structure intact 
 $CurrentDate = Get-Date
-$DatetoDelete = $CurrentDate.AddDays($Daysback)
-Get-ChildItem -Path $Dir2  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item 
+$DatetoDelete = $CurrentDate.AddMinutes($Daysback)
+Get-ChildItem -Path $Acss_Dir  -Include * -File -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Recurse -force
+echo "###############"
+echo "###############"
+Get-ChildItem -Path $Acss_Dir  -Directory -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Recurse -force
+
+echo "###############"
 echo "The files older than one day have been deleted successfully" 
 
-# Delete Log Files older than 7 day
+
+echo "`n"
+
+
+Stop-Transcript
+
+
 ####
 ####
-Get-ChildItem –Path $Dir2 –Recurse -Force -include *.log | Where-Object { $_.CreationTime –lt (Get-Date).AddDays(-7) } | Remove-Item -Force
+# Rog retention 7 day
+####
+####
+
+#Get-Content $Dir2 | select -Last 225 | Set-Content $Dir2
 
 exit
 
